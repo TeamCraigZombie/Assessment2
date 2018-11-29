@@ -1,10 +1,9 @@
 package com.craig.game.srpite;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class CSprite {
-    public int X;
-    public int Y;
+public class CSprite extends Drawable{
     public int Width;
     public int Height;
 
@@ -15,8 +14,7 @@ public class CSprite {
 
     public CSprite(Texture tex, int x, int y, int w, int h, int sx, int sy)
     {
-        X = x;
-        Y = y;
+        super(x, y);
         Width = w;
         Height = h;
 
@@ -28,8 +26,7 @@ public class CSprite {
 
     public CSprite(Texture tex, int x, int y, int w, int h)
     {
-        X = x;
-        Y = y;
+        super(x, y);
         Width = w;
         Height = h;
 
@@ -37,6 +34,12 @@ public class CSprite {
         SourceY = 0;
 
         Tex = tex;
+    }
+
+    @Override
+    public void draw(SpriteBatch target)
+    {
+        target.draw(Tex, X, Y, SourceX, SourceY, Width, Height);
     }
 
     public void setPosition(int x, int y, int w, int h)

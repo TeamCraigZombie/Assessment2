@@ -9,19 +9,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.craig.game.CraigGame;
 import com.craig.game.srpite.CSprite;
+import com.craig.game.srpite.Drawable;
 
 public class State implements Screen {
     final CraigGame Parent;
 
     /**Array of all sprites to be drawn*/
-    private Array<CSprite> Members;
+    private Array<Drawable> Members;
 
     public OrthographicCamera Cam;
 
     public State(final CraigGame parent)
     {
         Parent = parent;
-        Members = new Array<CSprite>();
+        Members = new Array<Drawable>();
     }
 
     @Override
@@ -35,8 +36,7 @@ public class State implements Screen {
         Parent.Batch.begin();
         for(int i = 0; i < Members.size; i++)
         {
-            CSprite img = Members.get(i);
-            Parent.Batch.draw(img.Tex, img.X, img.Y, img.SourceX, img.SourceY, img.Width, img.Height);
+            Members.get(i).draw(Parent.Batch);
         }
         Parent.Batch.end();
     }
@@ -77,7 +77,7 @@ public class State implements Screen {
      * adds a given sprite to this state (sprite will be drawn)
      * @param target sprite to be added
      */
-    public void add(CSprite target)
+    public void add(Drawable target)
     {
         Members.add(target);
     }
@@ -87,7 +87,7 @@ public class State implements Screen {
      * @param target sprite to be removed
      * @return true if <target> was in this state (and has been removed)
      */
-    public Boolean remove(CSprite target)
+    public Boolean remove(Drawable target)
     {
         return Members.removeValue(target, true);
     }

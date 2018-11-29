@@ -1,7 +1,9 @@
 package com.craig.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.craig.game.srpite.CText;
 import com.craig.game.state.State;
 import com.craig.game.state.instances.Test;
 
@@ -10,6 +12,8 @@ public class CraigGame extends Game {
 
 	@Override
 	public void create () {
+		CText.DefualtFont = new BitmapFont();
+
 		Batch = new SpriteBatch();
 		setScreen(new Test(this));
 	}
