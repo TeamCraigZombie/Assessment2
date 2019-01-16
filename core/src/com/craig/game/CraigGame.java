@@ -4,10 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.craig.game.Screens.EndScreen;
-import com.craig.game.Screens.LoadingScreen;
-import com.craig.game.Screens.MainScreen;
-import com.craig.game.Screens.MenuScreen;
+import com.craig.game.Screens.*;
 import com.craig.game.srpite.CText;
 import com.craig.game.state.State;
 import com.craig.game.state.instances.Test;
@@ -19,10 +16,12 @@ public class CraigGame extends Game {
 	private MainScreen mainScreen;
 	private EndScreen endScreen;
 	private LoadingScreen loadingScreen;
+	private PauseScreen pauseScreen;
 
 	public final static int MENU = 0;
 	public final static int APPLICATION = 1;
 	public final static int ENDGAME = 2;
+	public final static int PAUSE = 3;
 
 	@Override
 	public void create () {
@@ -48,7 +47,7 @@ public class CraigGame extends Game {
 	/**
 	 * changes the current state/view
 	 */
-	public void switchState(int screen) {
+	public void switchState(int screen, int character) {
 
 		//Allows the screens to be switched
 		switch(screen){
@@ -61,9 +60,12 @@ public class CraigGame extends Game {
 					this.setScreen(endScreen);
 				break;
 			case APPLICATION:
-				if (mainScreen ==  null) mainScreen = new MainScreen(this);
+				if (mainScreen ==  null) mainScreen = new MainScreen(this, character);
 					this.setScreen(mainScreen);
 				break;
+			case PAUSE:
+				if (pauseScreen == null) pauseScreen = new PauseScreen(this) ;
+				this.setScreen(pauseScreen);
 		}
 	}
 }

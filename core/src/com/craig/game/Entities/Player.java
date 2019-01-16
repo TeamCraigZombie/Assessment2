@@ -8,8 +8,8 @@ import com.craig.game.srpite.CSprite;
 
 public class Player extends Entity {
     private int health;
-    private int MAXV = 5;
-    public double DELTAV = 0.2;
+    private int MAXV;
+    private double DELTAV;
 
     private int mouseX, mouseY;
 
@@ -19,10 +19,19 @@ public class Player extends Entity {
         health = 100;
     }
 
-    public Player(Vector2 pos, Texture tex, Vector2 size)
+    public Player(Vector2 pos, Texture tex, Vector2 size, int character)
     {
         super(pos, tex, size);
-        health = 100;
+        if (character == 0) {
+            health = 150;
+            DELTAV = 0.2;
+            MAXV = 3;
+        }
+        else {
+            health = 100;
+            DELTAV = 0.2;
+            MAXV = 20;
+        }
     }
 
     public void update(){

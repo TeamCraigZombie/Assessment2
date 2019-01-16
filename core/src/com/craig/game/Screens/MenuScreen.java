@@ -19,6 +19,7 @@ public class MenuScreen extends State {
 
     private CraigGame parent;
     private Stage stage;
+    private int character = 0;
 
     public MenuScreen(CraigGame craigGame){
         super(craigGame);
@@ -54,7 +55,7 @@ public class MenuScreen extends State {
         Label characterLabel = new Label("SELECT CHARACTER:", skin);
         characterLabel.setColor(Color.BLACK);
         final SelectBox<String> characters = new SelectBox<String>(skin);
-        characters.setItems("Character 1","Character 2");
+        characters.setItems("Brick","Whiz");
 
         //This adds the buttons, labels and dropdown box to the table
 
@@ -79,7 +80,15 @@ public class MenuScreen extends State {
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                parent.switchState(CraigGame.APPLICATION);
+                parent.switchState(CraigGame.APPLICATION, character);
+            }
+        });
+
+        characters.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (characters.getSelected() == "Brick") {character = 0;}
+                else {character = 1;}
             }
         });
 
@@ -128,4 +137,5 @@ public class MenuScreen extends State {
         // Assets disposed when no longer required
         stage.dispose();
     }
+
 }
