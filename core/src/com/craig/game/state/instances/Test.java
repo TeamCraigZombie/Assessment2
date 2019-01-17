@@ -21,34 +21,34 @@ public class Test extends State {
     public Test(CraigGame Parent)
     {
         super(Parent);
-        player1 = new Player(new Vector2(910, 480), new Texture("square.png"), new Vector2(100, 100));
+        player1 = new Player(new Vector2(910, 480), new Texture("square.png"), new Vector2(100, 100), 0);
         add(player1.sprite);
         mouseHeld = false;
     }
 
-    @Override
-    public void update(float time)
-    {
-        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {leftClick();}
-        if(!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {mouseHeld = false;}
-        if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {keyPressed();}
+//    @Override
+//    public void update(float time)
+//    {
+//        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {leftClick();}
+//        if(!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {mouseHeld = false;}
+//        if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {keyPressed();}
+//
+//        player1.update();
+//
+//        for (int i = 0; i < bullets.size; i++) {bullets.get(i).update();}
+//    }
 
-        player1.update();
-
-        for (int i = 0; i < bullets.size; i++) {bullets.get(i).update();}
-    }
-
-    private void keyPressed(){
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){player1.moveUp();}
-        if(Gdx.input.isKeyPressed(Input.Keys.S)){player1.moveDown();}
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){player1.moveLeft();}
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){player1.moveRight();}
-    }
-
-    private void leftClick() {
-        if (!mouseHeld) {
-            add(player1.shoot(bullets));
-            mouseHeld = true;
-        }
-    }
+//    private void keyPressed(){
+//        if(Gdx.input.isKeyPressed(Input.Keys.W)){player1.moveUp();}
+//        if(Gdx.input.isKeyPressed(Input.Keys.S)){player1.moveDown();}
+//        if(Gdx.input.isKeyPressed(Input.Keys.A)){player1.moveLeft();}
+//        if(Gdx.input.isKeyPressed(Input.Keys.D)){player1.moveRight();}
+//    }
+//
+//    private void leftClick() {
+//        if (!mouseHeld) {
+//            add(player1.shoot(bullets));
+//            mouseHeld = true;
+//        }
+//    }
 }
