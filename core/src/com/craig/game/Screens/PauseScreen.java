@@ -61,7 +61,7 @@ public class PauseScreen extends State {
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit();
+                parent.switchState(CraigGame.MENU, 0);
             }
         });
 

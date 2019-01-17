@@ -25,12 +25,15 @@ public class MainScreen extends State {
 
     private CraigGame parent;
     private Stage stage;
+
     private Player player1;
     private Array<Projectile> bullets = new Array<Projectile>();
     private boolean mouseHeld;
-    TiledMap tiledMap;
-    TiledMapRenderer tMapRenderer;
-    TiledMapTileLayer collisionLayer;
+
+    private TiledMap tiledMap;
+    private TiledMapRenderer tMapRenderer;
+    private TiledMapTileLayer collisionLayer;
+    int mapWidth, mapHeight;
 
 
     public MainScreen(CraigGame craigGame, int character){
@@ -42,9 +45,12 @@ public class MainScreen extends State {
         this.Cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Cam.update();
+
         tiledMap = new TmxMapLoader().load("map.tmx");
         tMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         collisionLayer = (TiledMapTileLayer)  tiledMap.getLayers().get(1);
+        mapWidth = 5447;
+        mapHeight = 3135;
 
         player1 = new Player(new Vector2(2120, 1280), new Texture("square.png"), new Vector2(50, 50), character);
         add(player1.sprite);
@@ -58,19 +64,20 @@ public class MainScreen extends State {
         if(!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {mouseHeld = false;}
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {keyPressed();}
 
-        player1.update(collisionLayer);
+        player1.update(collisionLayer, Cam.position);
 
-
-        for (int i = 0; i < bullets.size; i++) {bullets.get(i).update();}
+        for (int i = 0; i < bullets.size; i++) {
+            bullets.get(i).update();
+            if (bullets.get(i).collision(collisionLayer)) {
+                remove(bullets.get(i).sprite);
+                bullets.removeIndex(i);}
+        }
     }
 
     @Override
     public void render(float delta) {
-        parent.Batch.setProjectionMatrix(Cam.combined);
-        Cam.position.x = player1.sprite.X;
-        Cam.position.y = player1.sprite.Y;
+        updateCam();
 
-        Cam.update();
         tMapRenderer.setView(Cam);
         tMapRenderer.render();
 
@@ -100,6 +107,17 @@ public class MainScreen extends State {
     @Override
     public void dispose() {
 
+    }
+
+    private void updateCam(){
+        parent.Batch.setProjectionMatrix(Cam.combined);
+        if (player1.sprite.X > Gdx.graphics.getWidth()/2 + 485 && player1.sprite.X < mapWidth - Gdx.graphics.getWidth()/2){
+            Cam.position.x = player1.sprite.X;
+        }
+        if (player1.sprite.Y > Gdx.graphics.getHeight()/2 + 485 && player1.sprite.Y < mapHeight - Gdx.graphics.getHeight()/2){
+            Cam.position.y = player1.sprite.Y;
+        }
+        Cam.update();
     }
 
     private void keyPressed(){

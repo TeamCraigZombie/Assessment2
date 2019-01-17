@@ -54,6 +54,8 @@ public class CraigGame extends Game {
 			case MENU:
 				if(menuScreen == null) menuScreen = new MenuScreen(this);
 					this.setScreen(menuScreen);
+					mainScreen = null;
+					pauseScreen = null;
 				break;
 			case ENDGAME:
 				if (endScreen ==  null) endScreen = new EndScreen(this);
@@ -62,6 +64,7 @@ public class CraigGame extends Game {
 			case APPLICATION:
 				if (mainScreen ==  null) mainScreen = new MainScreen(this, character);
 					this.setScreen(mainScreen);
+					menuScreen = null;
 				break;
 			case PAUSE:
 				if (pauseScreen == null) pauseScreen = new PauseScreen(this) ;

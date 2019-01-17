@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.craig.game.srpite.CSprite;
 
@@ -35,31 +36,12 @@ public class Player extends Entity {
         }
     }
 
-    public void update(TiledMapTileLayer collisionLayer){
-        if (velocity.x > 0){
-            if(isCellBlocked(sprite.X + sprite.Width + 10, sprite.Y + sprite.Height/2, collisionLayer)){
-                velocity.x = 0;
-            }
-        }
-        if (velocity.x < 0){
-            if(isCellBlocked(sprite.X - 10, sprite.Y + sprite.Height/2, collisionLayer)){
-                velocity.x = 0;
-            }
-        }
-        if (velocity.y > 0){
-            if(isCellBlocked(sprite.X + sprite.Width/2, sprite.Y + sprite.Height + 10, collisionLayer)){
-                velocity.y = 0;
-            }
-        }
-        if (velocity.y < 0){
-            if(isCellBlocked(sprite.X + sprite.Width/2, sprite.Y - 10, collisionLayer)){
-                velocity.y = 0;
-            }
-        }
+    public void update(TiledMapTileLayer collisionLayer, Vector3 camPos){
+        wallCollision(collisionLayer);
         sprite.X += velocity.x;
         sprite.Y += velocity.y;
-        mouseX = Gdx.input.getX();
-        mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+        mouseX = (int)camPos.x - (Gdx.graphics.getWidth()/2) + Gdx.input.getX();
+        mouseY = (int)camPos.y + (Gdx.graphics.getHeight()/2) - Gdx.input.getY();
         rotate();
         if (velocity.x != 0 || velocity.y != 0) {updateVelocity();}
     }
@@ -115,11 +97,26 @@ public class Player extends Entity {
         return bullet.sprite;
     }
 
-    public boolean isCellBlocked(int x, int y, TiledMapTileLayer collisionLayer) {
-        TiledMapTileLayer.Cell cell = collisionLayer.getCell(
-                (int)(x / collisionLayer.getTileWidth()),
-                (int)(y / collisionLayer.getTileHeight()));
-
-        return cell != null && cell.getTile() != null && cell.getTile().getProperties().get("wall").equals(true);
+    private void wallCollision(TiledMapTileLayer collisionLayer){
+        if (velocity.x > 0){
+            if(isCellBlocked(sprite.X + sprite.Width + 10, sprite.Y + sprite.Height/2, collisionLayer)){
+                velocity.x = 0;
+            }
+        }
+        if (velocity.x < 0){
+            if(isCellBlocked(sprite.X - 10, sprite.Y + sprite.Height/2, collisionLayer)){
+                velocity.x = 0;
+            }
+        }
+        if (velocity.y > 0){
+            if(isCellBlocked(sprite.X + sprite.Width/2, sprite.Y + sprite.Height + 10, collisionLayer)){
+                velocity.y = 0;
+            }
+        }
+        if (velocity.y < 0){
+            if(isCellBlocked(sprite.X + sprite.Width/2, sprite.Y - 10, collisionLayer)){
+                velocity.y = 0;
+            }
+        }
     }
 }

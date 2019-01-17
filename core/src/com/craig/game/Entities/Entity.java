@@ -2,6 +2,7 @@ package com.craig.game.Entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.craig.game.srpite.CSprite;
 
@@ -22,6 +23,14 @@ public class Entity {
         position = pos;
         velocity = new Vector2(0, 0);
         sprite = new CSprite(tex, (int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
+    }
+
+    protected boolean isCellBlocked(int x, int y, TiledMapTileLayer collisionLayer) {
+        TiledMapTileLayer.Cell cell = collisionLayer.getCell(
+                (int)(x / collisionLayer.getTileWidth()),
+                (int)(y / collisionLayer.getTileHeight()));
+
+        return cell != null && cell.getTile() != null && cell.getTile().getProperties().get("wall").equals(true);
     }
 
 }

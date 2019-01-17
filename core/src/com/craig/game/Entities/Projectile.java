@@ -1,6 +1,7 @@
 package com.craig.game.Entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Projectile extends Entity {
@@ -13,5 +14,13 @@ public class Projectile extends Entity {
     public void update() {
         sprite.X += velocity.x;
         sprite.Y += velocity.y;
+
+    }
+
+    public boolean collision(TiledMapTileLayer collisionLayer) {
+        if(isCellBlocked(sprite.X + sprite.Width/2, sprite.Y + sprite.Height/2, collisionLayer)){
+            return true;
+        }
+        else {return false;}
     }
 }
