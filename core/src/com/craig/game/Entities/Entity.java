@@ -33,4 +33,14 @@ public class Entity {
         return cell != null && cell.getTile() != null && cell.getTile().getProperties().get("wall").equals(true);
     }
 
+    protected boolean isCollison(Entity obj){
+        if (sprite.X >= obj.sprite.X - obj.sprite.Width && sprite.X <= obj.sprite.X + obj.sprite.Width){
+            if (sprite.Y >= obj.sprite.Y - obj.sprite.Height && sprite.Y <= obj.sprite.Y + obj.sprite.Height){
+                return true;
+            }
+            else { return false;}
+        }
+        else {return false;}
+    }
+
 }

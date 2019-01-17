@@ -15,7 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.craig.game.CraigGame;
+import com.craig.game.Entities.Coffee;
 import com.craig.game.Entities.Player;
+import com.craig.game.Entities.Powerup;
 import com.craig.game.Entities.Projectile;
 import com.craig.game.state.State;
 
@@ -33,7 +35,9 @@ public class MainScreen extends State {
     private TiledMap tiledMap;
     private TiledMapRenderer tMapRenderer;
     private TiledMapTileLayer collisionLayer;
-    int mapWidth, mapHeight;
+    private Vector2 mapSize;
+
+    private Array<Powerup> powerups = new Array<Powerup>();
 
 
     public MainScreen(CraigGame craigGame, int character){
@@ -49,12 +53,18 @@ public class MainScreen extends State {
         tiledMap = new TmxMapLoader().load("map.tmx");
         tMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         collisionLayer = (TiledMapTileLayer)  tiledMap.getLayers().get(1);
-        mapWidth = 5447;
-        mapHeight = 3135;
+        //mapWidth = 5447;
+        //mapHeight = 3135;
+        mapSize = new Vector2(5447, 3135);
 
-        player1 = new Player(new Vector2(2120, 1280), new Texture("square.png"), new Vector2(50, 50), character);
+        player1 = new Player(new Texture("square.png"), character);
         add(player1.sprite);
         mouseHeld = false;
+
+        for (int i=0; i < 3; i++) {
+            powerups.add(new Coffee(new Texture("gSquare.png"), mapSize, collisionLayer) );
+            add(powerups.get(i).sprite);
+        }
     }
 
     @Override
@@ -71,6 +81,13 @@ public class MainScreen extends State {
             if (bullets.get(i).collision(collisionLayer)) {
                 remove(bullets.get(i).sprite);
                 bullets.removeIndex(i);}
+        }
+
+        for (int i = 0; i < powerups.size; i++){
+            if (powerups.get(i).checkCollision(player1)) {
+                remove(powerups.get(i).sprite);
+                powerups.removeIndex(i);
+            }
         }
     }
 
@@ -111,10 +128,10 @@ public class MainScreen extends State {
 
     private void updateCam(){
         parent.Batch.setProjectionMatrix(Cam.combined);
-        if (player1.sprite.X > Gdx.graphics.getWidth()/2 + 485 && player1.sprite.X < mapWidth - Gdx.graphics.getWidth()/2){
+        if (player1.sprite.X > Gdx.graphics.getWidth()/2 + 485 && player1.sprite.X < mapSize.x - Gdx.graphics.getWidth()/2){
             Cam.position.x = player1.sprite.X;
         }
-        if (player1.sprite.Y > Gdx.graphics.getHeight()/2 + 485 && player1.sprite.Y < mapHeight - Gdx.graphics.getHeight()/2){
+        if (player1.sprite.Y > Gdx.graphics.getHeight()/2 + 485 && player1.sprite.Y < mapSize.y - Gdx.graphics.getHeight()/2){
             Cam.position.y = player1.sprite.Y;
         }
         Cam.update();

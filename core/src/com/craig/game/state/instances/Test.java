@@ -21,9 +21,9 @@ public class Test extends State {
     public Test(CraigGame Parent)
     {
         super(Parent);
-        player1 = new Player(new Vector2(910, 480), new Texture("square.png"), new Vector2(100, 100), 0);
-        add(player1.sprite);
-        mouseHeld = false;
+//        player1 = new Player(new Vector2(910, 480), new Texture("square.png"), new Vector2(100, 100), 0);
+//        add(player1.sprite);
+//        mouseHeld = false;
     }
 
 //    @Override

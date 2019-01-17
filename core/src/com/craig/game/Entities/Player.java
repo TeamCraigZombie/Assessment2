@@ -7,32 +7,37 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.craig.game.srpite.CSprite;
 
 public class Player extends Entity {
     private int health;
-    private int MAXV;
+    public int trueV;
+    public int MAXV;
     private double DELTAV;
     private int mouseX, mouseY;
+    private double startTime, endTime;
 
-    public Player(Vector2 pos, Vector2 vel, Texture tex, Vector2 size)
-    {
-        super(pos, vel, tex, size);
-        health = 100;
-    }
+//    public Player(Vector2 pos, Vector2 vel, Texture tex, Vector2 size)
+//    {
+//        super(pos, vel, tex, size);
+//        health = 100;
+//    }
 
-    public Player(Vector2 pos, Texture tex, Vector2 size, int character)
+    public Player(Texture tex, int character)
     {
-        super(pos, tex, size);
+        super(new Vector2(2120, 1280), tex, new Vector2(50, 50));
         if (character == 0) {
             health = 150;
             DELTAV = 0.2;
             MAXV = 3;
+            trueV = 3;
         }
         else {
             health = 100;
             DELTAV = 0.2;
-            MAXV = 9;
+            MAXV = 6;
+            trueV = 6;
         }
     }
 
@@ -44,6 +49,7 @@ public class Player extends Entity {
         mouseY = (int)camPos.y + (Gdx.graphics.getHeight()/2) - Gdx.input.getY();
         rotate();
         if (velocity.x != 0 || velocity.y != 0) {updateVelocity();}
+        if (System.currentTimeMillis() >= endTime) {MAXV = trueV;}
     }
 
     private void updateVelocity(){
@@ -118,5 +124,13 @@ public class Player extends Entity {
                 velocity.y = 0;
             }
         }
+    }
+
+    public void startClock(){
+        startTime = System.currentTimeMillis();
+        endTime = startTime + 20000;
+        System.out.println(startTime);
+        System.out.println(endTime);
+        System.out.println(System.currentTimeMillis());
     }
 }
