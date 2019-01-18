@@ -30,7 +30,7 @@ public class Entity {
                 (int)(x / collisionLayer.getTileWidth()),
                 (int)(y / collisionLayer.getTileHeight()));
 
-        return cell != null && cell.getTile() != null && cell.getTile().getProperties().get("wall").equals(true);
+        return cell != null && cell.getTile() != null && (cell.getTile().getProperties().get("wall").equals(true) || cell.getTile().getProperties().get("barrier").equals(true));
     }
 
     protected boolean isCollision(Entity obj){

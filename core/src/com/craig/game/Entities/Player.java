@@ -28,7 +28,7 @@ public class Player extends Entity {
 
     public Player(Texture tex, int character)
     {
-        super(new Vector2(2120, 1280), tex, new Vector2(50, 50));
+        super(new Vector2(607, 2048), tex, new Vector2(50, 50));
         if (character == 0) {
             health = 150;
             maxHealth = 150;
@@ -45,10 +45,13 @@ public class Player extends Entity {
         }
     }
 
-    public void update(TiledMapTileLayer collisionLayer, Vector3 camPos){
+    public void update(TiledMapTileLayer collisionLayer, TiledMapTileLayer mapBox, Vector3 camPos){
         wallCollision(collisionLayer);
+        if(!(mapBox == null)) {wallCollision(mapBox);}
         sprite.X += velocity.x;
         sprite.Y += velocity.y;
+        //System.out.println(sprite.X);
+        //System.out.println(sprite.Y);
         mouseX = (int)camPos.x - (Gdx.graphics.getWidth()/2) + Gdx.input.getX();
         mouseY = (int)camPos.y + (Gdx.graphics.getHeight()/2) - Gdx.input.getY();
         rotate();

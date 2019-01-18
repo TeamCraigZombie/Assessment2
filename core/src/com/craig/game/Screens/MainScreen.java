@@ -26,15 +26,19 @@ public class MainScreen extends State {
 
     private Player player1;
     private Array<Projectile> bullets = new Array<Projectile>();
-    private boolean mouseHeld, gameComplete;
+    private boolean mouseHeld, gameComplete,  rapidFire;
 
     private TiledMap tiledMap;
     private TiledMapRenderer tMapRenderer;
-    private TiledMapTileLayer collisionLayer;
+    private TiledMapTileLayer collisionLayer, csBox, rchBox;
     private Vector2 mapSize;
+
+    private Vector2 csCamBox;
+    private int rchCamBox;
 
     private Array<Powerup> powerups = new Array<Powerup>();
     private Array<Key> Keys = new Array<Key>();
+    private RapidFire currentRF;
 
 
     public MainScreen(CraigGame craigGame, int character){
@@ -45,31 +49,39 @@ public class MainScreen extends State {
 
         this.Cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Cam.position.x = 1445;
+        Cam.position.y = 2337;
         Cam.update();
 
         tiledMap = new TmxMapLoader().load("map.tmx");
         tMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         collisionLayer = (TiledMapTileLayer)  tiledMap.getLayers().get(1);
-        //mapWidth = 5447;
-        //mapHeight = 3135;
+        csBox = (TiledMapTileLayer)  tiledMap.getLayers().get(2);
+        rchBox = (TiledMapTileLayer)  tiledMap.getLayers().get(3);
         mapSize = new Vector2(5447, 3135);
+
+        csCamBox = new Vector2(3035, 1797);
+        rchCamBox = 3740;
 
         player1 = new Player(new Texture("player.png"), character);
         add(player1.sprite);
         mouseHeld = false;
         gameComplete = false;
+        rapidFire = false;
 
-        for (int i=0; i < 6; i+=2) {
-            powerups.add(new Coffee(new Texture("brSquare.png"), mapSize, collisionLayer) );
+        for (int i=0; i < 9; i+=3) {
+            powerups.add(new Coffee(new Texture("CoffeeCup2.png"), mapSize, collisionLayer) );
             add(powerups.get(i).sprite);
-            powerups.add(new MaxHealth(new Texture("rSquare.png"), mapSize, collisionLayer) );
+            powerups.add(new MaxHealth(new Texture("HealthPack.png"), mapSize, collisionLayer) );
             add(powerups.get(i+1).sprite);
+            powerups.add(new RapidFire(new Texture("rSquare.png"), mapSize, collisionLayer) );
+            add(powerups.get(i+2).sprite);
         }
 
-        Keys.add(new Key(new Vector2(1254, 2198), new Texture("gldSquare.png")));
-        Keys.add(new Key(new Vector2(1640, 703), new Texture("gldSquare.png")));
-        Keys.add(new Key(new Vector2(4300, 2255), new Texture("gldSquare.png")));
-        Keys.add(new Key(new Vector2(5319, 487), new Texture("gldSquare.png")));
+        Keys.add(new Key(new Vector2(1254, 2198), new Texture("Key.png")));
+        Keys.add(new Key(new Vector2(1640, 703), new Texture("Key.png")));
+        Keys.add(new Key(new Vector2(4300, 2255), new Texture("Key.png")));
+        Keys.add(new Key(new Vector2(5319, 487), new Texture("Key.png")));
 
         for(int i=0; i<Keys.size-1; i++){add(Keys.get(i).sprite);}
     }
@@ -81,7 +93,9 @@ public class MainScreen extends State {
         if(!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {mouseHeld = false;}
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {keyPressed();}
 
-        player1.update(collisionLayer, Cam.position);
+        if (!Keys.get(0).isFound()){ player1.update(collisionLayer, csBox, Cam.position);}
+        else if (!Keys.get(1).isFound()){ player1.update(collisionLayer, rchBox, Cam.position);}
+        else { player1.update(collisionLayer, null, Cam.position);}
 
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).update();
@@ -91,16 +105,24 @@ public class MainScreen extends State {
         }
 
         for (int i = 0; i < powerups.size; i++){
-            if (powerups.get(i).checkCollision(player1)) {
+            if (powerups.get(i).checkCollision(player1, rapidFire)) {
                 remove(powerups.get(i).sprite);
+                if(powerups.get(i).israpidFire()) {
+                    rapidFire = true;
+                    currentRF = (RapidFire)powerups.get(i);
+                }
                 powerups.removeIndex(i);
             }
+        }
+
+        if(rapidFire) {
+            rapidFire = !(currentRF.isTimeUp());
         }
 
         if(!gameComplete) {
             gameComplete = true;
             for (int i = 0; i < Keys.size - 1; i++) {
-                if (Keys.get(i).checkCollision(player1)) {
+                if (Keys.get(i).checkCollision(player1, false)) {
                     remove(Keys.get(i).sprite);
                 }
                 if (!Keys.get(i).isFound()) {
@@ -109,7 +131,7 @@ public class MainScreen extends State {
             }
             if(gameComplete) {add(Keys.get(Keys.size-1).sprite);}
         }
-        if(gameComplete && Keys.get(Keys.size-1).checkCollision(player1)){parent.switchState(CraigGame.MENU, 0);}
+        if(gameComplete && Keys.get(Keys.size-1).checkCollision(player1, false)){parent.switchState(CraigGame.MENU, 0);}
     }
 
     @Override
@@ -149,11 +171,29 @@ public class MainScreen extends State {
 
     private void updateCam(){
         parent.Batch.setProjectionMatrix(Cam.combined);
-        if (player1.sprite.X > Gdx.graphics.getWidth()/2 + 485 && player1.sprite.X < mapSize.x - Gdx.graphics.getWidth()/2){
-            Cam.position.x = player1.sprite.X;
+
+        if(!Keys.get(0).isFound()) {
+            if (player1.sprite.X > Gdx.graphics.getWidth() / 2 + 485 && player1.sprite.X < csCamBox.x - Gdx.graphics.getWidth() / 2) {
+                Cam.position.x = player1.sprite.X;
+            }
+            if (player1.sprite.Y > Gdx.graphics.getHeight() / 2 + csCamBox.y && player1.sprite.Y < mapSize.y - Gdx.graphics.getHeight() / 2) {
+                Cam.position.y = player1.sprite.Y;
+            }
         }
-        if (player1.sprite.Y > Gdx.graphics.getHeight()/2 + 485 && player1.sprite.Y < mapSize.y - Gdx.graphics.getHeight()/2){
-            Cam.position.y = player1.sprite.Y;
+        else {
+            if (!Keys.get(1).isFound()) {
+                if (player1.sprite.X > Gdx.graphics.getWidth() / 2 + 485 && player1.sprite.X < rchCamBox - Gdx.graphics.getWidth() / 2) {
+                    Cam.position.x = player1.sprite.X;
+                }
+            }
+            else {
+                if (player1.sprite.X > Gdx.graphics.getWidth()/2 + 485 && player1.sprite.X < mapSize.x - Gdx.graphics.getWidth()/2){
+                    Cam.position.x = player1.sprite.X;
+                }
+            }
+            if (player1.sprite.Y > Gdx.graphics.getHeight() / 2 + 485 && player1.sprite.Y < mapSize.y - Gdx.graphics.getHeight() / 2) {
+                    Cam.position.y = player1.sprite.Y;
+            }
         }
         Cam.update();
     }
@@ -168,7 +208,7 @@ public class MainScreen extends State {
     }
 
     private void leftClick() {
-        if (!mouseHeld) {
+        if (!mouseHeld || rapidFire) {
             add(player1.shoot(bullets));
             mouseHeld = true;
         }

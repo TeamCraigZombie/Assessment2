@@ -10,7 +10,7 @@ public class Coffee extends Powerup {
     }
 
     @Override
-    public boolean checkCollision(Player obj){
+    public boolean checkCollision(Player obj, boolean na){
         if (isCollision(obj) && obj.MAXV < obj.trueV * 2) {
             obj.startClock();
             obj.MAXV = obj.trueV * 2;

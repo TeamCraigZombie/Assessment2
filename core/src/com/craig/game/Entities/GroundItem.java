@@ -9,5 +9,7 @@ public class GroundItem extends Entity {
         super(position, tex, new Vector2(50, 50));
     }
 
-    public boolean checkCollision(Player obj){return false;}
+    public boolean checkCollision(Player obj, boolean na){return false;}
+
+    public boolean israpidFire() {return true;}
 }
