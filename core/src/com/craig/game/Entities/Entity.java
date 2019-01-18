@@ -17,11 +17,11 @@ public class Entity {
         sprite = new CSprite(tex, (int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
     }
 
-    public Entity(Vector2 pos, Texture tex, Vector2 size)
+/*    public Entity(Vector2 pos, Texture tex, Vector2 size)
     {
         position = pos;
         velocity = new Vector2(0, 0);
         sprite = new CSprite(tex, (int)pos.x, (int)pos.y, (int)size.x, (int)size.y);
-    }
+    }*/
 
 }

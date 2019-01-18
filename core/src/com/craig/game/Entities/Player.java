@@ -6,18 +6,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.craig.game.srpite.CSprite;
 
-public class Player extends Entity {
+public class Player extends Collideable {
     private int health;
     private int MAXV = 5;
     public double DELTAV = 0.2;
 
     private int mouseX, mouseY;
 
-    public Player(Vector2 pos, Vector2 vel, Texture tex, Vector2 size)
+/*    public Player(Vector2 pos, Vector2 vel, Texture tex, Vector2 size)
     {
         super(pos, vel, tex, size);
         health = 100;
-    }
+    }*/
 
     public Player(Vector2 pos, Texture tex, Vector2 size)
     {
