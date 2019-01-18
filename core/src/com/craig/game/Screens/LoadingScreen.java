@@ -20,7 +20,7 @@ public class LoadingScreen extends State{
 
     @Override
     public void render(float delta) {
-        parent.switchState(CraigGame.MENU);
+        parent.switchState(CraigGame.MENU, 0);
 
     }
 

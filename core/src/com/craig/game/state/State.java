@@ -30,8 +30,6 @@ public class State implements Screen {
     {
         update(delta);
 
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         Parent.Batch.begin();
         for(int i = 0; i < Members.size; i++)

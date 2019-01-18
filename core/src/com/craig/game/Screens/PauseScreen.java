@@ -1,7 +1,6 @@
 package com.craig.game.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,15 +14,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.craig.game.CraigGame;
 import com.craig.game.state.State;
 
-public class MenuScreen extends State {
+public class PauseScreen extends State {
 
     private CraigGame parent;
     private Stage stage;
-    private int character = 0;
 
-    public MenuScreen(CraigGame craigGame){
+    public PauseScreen(CraigGame craigGame){
         super(craigGame);
-
         parent = craigGame;
 
         // creates stage and sets it as input processor
@@ -32,7 +29,7 @@ public class MenuScreen extends State {
     }
 
     @Override
-    public void show() {
+    public void show(){
 
         //Creates a table that fills the screen and sets the menu background
         Table table = new Table();
@@ -47,23 +44,14 @@ public class MenuScreen extends State {
 
 
         //creates buttons
-        TextButton start = new TextButton("START", skin);
+        TextButton resume = new TextButton("RESUME", skin);
         TextButton exit = new TextButton("EXIT", skin);
 
 
-        //Creates select box and dialog box for character selection
-        Label characterLabel = new Label("SELECT CHARACTER:", skin);
-        characterLabel.setColor(Color.BLACK);
-        final SelectBox<String> characters = new SelectBox<String>(skin);
-        characters.setItems("Brick","Whiz");
-
         //This adds the buttons, labels and dropdown box to the table
-
-        table.add(start).fillX().fillY().uniform().width(200).height(55).padBottom(20);
+        table.add(resume).fillX().fillY().uniform().width(200).height(55).padBottom(20);
         table.row();
-        table.add(characterLabel);
         table.row().pad(5,0,5,0);
-        table.add(characters).fillX().padBottom(35);
         table.row();
         table.add(exit).fillX().fillY().uniform().width(200). height(55);
 
@@ -73,30 +61,20 @@ public class MenuScreen extends State {
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit();
+                parent.switchState(CraigGame.MENU, 0);
             }
         });
 
-        start.addListener(new ChangeListener() {
+        resume.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                parent.switchState(CraigGame.APPLICATION, character);
+                parent.switchState(CraigGame.APPLICATION, 0);
             }
         });
-
-        characters.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (characters.getSelected() == "Brick") {character = 0;}
-                else {character = 1;}
-            }
-        });
-
     }
 
     @Override
-    public void render(float delta) {
-
+    public void render(float delta){
         // Empties Screen
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
@@ -106,36 +84,11 @@ public class MenuScreen extends State {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-
     }
 
     @Override
-    public void resize(int width, int height) {
-
+    public void resize(int width, int height){
         // Allows viewport to be changed when the size of the screen also changes
         stage.getViewport().update(width, height, true);
-
     }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        // Assets disposed when no longer required
-        stage.dispose();
-    }
-
 }
