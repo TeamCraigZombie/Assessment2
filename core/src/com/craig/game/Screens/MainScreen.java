@@ -164,7 +164,7 @@ public class MainScreen extends State {
         if(Gdx.input.isKeyPressed(Input.Keys.A)){player1.moveLeft(collisionLayer);}
         if(Gdx.input.isKeyPressed(Input.Keys.D)){player1.moveRight(collisionLayer);}
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){parent.switchState(CraigGame.PAUSE, 0);}
-        if(Gdx.input.isKeyPressed(Input.Keys.NUM_1)){tiledMap.getLayers().get(1).setVisible(false);}
+        if(Gdx.input.isKeyPressed(Input.Keys.NUM_1)){tiledMap.getLayers().get(1).setVisible(true);}
     }
 
     private void leftClick() {
