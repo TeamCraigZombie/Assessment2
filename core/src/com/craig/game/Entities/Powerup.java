@@ -4,12 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
-import java.util.Timer;
-
-public class Powerup extends Entity {
+public class Powerup extends GroundItem {
 
     public Powerup(Texture tex, Vector2 mapSize, TiledMapTileLayer collisionLayer) {
-        super(new Vector2(0, 0), tex, new Vector2(50, 50));
+        super(new Vector2(0, 0), tex);
 
         boolean posFound = false;
 
@@ -24,6 +22,4 @@ public class Powerup extends Entity {
             }
         }
     }
-
-    public boolean checkCollision(Player obj){return false;}
 }

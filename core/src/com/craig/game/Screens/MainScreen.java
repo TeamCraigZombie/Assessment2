@@ -10,15 +10,11 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.craig.game.CraigGame;
-import com.craig.game.Entities.Coffee;
-import com.craig.game.Entities.Player;
-import com.craig.game.Entities.Powerup;
-import com.craig.game.Entities.Projectile;
+import com.craig.game.Entities.*;
 import com.craig.game.state.State;
 
 
@@ -30,7 +26,7 @@ public class MainScreen extends State {
 
     private Player player1;
     private Array<Projectile> bullets = new Array<Projectile>();
-    private boolean mouseHeld;
+    private boolean mouseHeld, gameComplete;
 
     private TiledMap tiledMap;
     private TiledMapRenderer tMapRenderer;
@@ -38,6 +34,7 @@ public class MainScreen extends State {
     private Vector2 mapSize;
 
     private Array<Powerup> powerups = new Array<Powerup>();
+    private Array<Key> Keys = new Array<Key>();
 
 
     public MainScreen(CraigGame craigGame, int character){
@@ -57,14 +54,24 @@ public class MainScreen extends State {
         //mapHeight = 3135;
         mapSize = new Vector2(5447, 3135);
 
-        player1 = new Player(new Texture("square.png"), character);
+        player1 = new Player(new Texture("player.png"), character);
         add(player1.sprite);
         mouseHeld = false;
+        gameComplete = false;
 
-        for (int i=0; i < 3; i++) {
-            powerups.add(new Coffee(new Texture("gSquare.png"), mapSize, collisionLayer) );
+        for (int i=0; i < 6; i+=2) {
+            powerups.add(new Coffee(new Texture("brSquare.png"), mapSize, collisionLayer) );
             add(powerups.get(i).sprite);
+            powerups.add(new MaxHealth(new Texture("rSquare.png"), mapSize, collisionLayer) );
+            add(powerups.get(i+1).sprite);
         }
+
+        Keys.add(new Key(new Vector2(1254, 2198), new Texture("gldSquare.png")));
+        Keys.add(new Key(new Vector2(1640, 703), new Texture("gldSquare.png")));
+        Keys.add(new Key(new Vector2(4300, 2255), new Texture("gldSquare.png")));
+        Keys.add(new Key(new Vector2(5319, 487), new Texture("gldSquare.png")));
+
+        for(int i=0; i<Keys.size-1; i++){add(Keys.get(i).sprite);}
     }
 
     @Override
@@ -89,6 +96,20 @@ public class MainScreen extends State {
                 powerups.removeIndex(i);
             }
         }
+
+        if(!gameComplete) {
+            gameComplete = true;
+            for (int i = 0; i < Keys.size - 1; i++) {
+                if (Keys.get(i).checkCollision(player1)) {
+                    remove(Keys.get(i).sprite);
+                }
+                if (!Keys.get(i).isFound()) {
+                    gameComplete = false;
+                }
+            }
+            if(gameComplete) {add(Keys.get(Keys.size-1).sprite);}
+        }
+        if(gameComplete && Keys.get(Keys.size-1).checkCollision(player1)){parent.switchState(CraigGame.MENU, 0);}
     }
 
     @Override

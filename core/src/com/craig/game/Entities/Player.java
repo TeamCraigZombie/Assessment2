@@ -11,12 +11,14 @@ import com.badlogic.gdx.utils.Timer;
 import com.craig.game.srpite.CSprite;
 
 public class Player extends Entity {
-    private int health;
     public int trueV;
     public int MAXV;
+
+    private int health;
+    private int maxHealth;
     private double DELTAV;
     private int mouseX, mouseY;
-    private double startTime, endTime;
+    private double endTime;
 
 //    public Player(Vector2 pos, Vector2 vel, Texture tex, Vector2 size)
 //    {
@@ -29,12 +31,14 @@ public class Player extends Entity {
         super(new Vector2(2120, 1280), tex, new Vector2(50, 50));
         if (character == 0) {
             health = 150;
+            maxHealth = 150;
             DELTAV = 0.2;
             MAXV = 3;
             trueV = 3;
         }
         else {
             health = 100;
+            maxHealth = 100;
             DELTAV = 0.2;
             MAXV = 6;
             trueV = 6;
@@ -127,10 +131,13 @@ public class Player extends Entity {
     }
 
     public void startClock(){
-        startTime = System.currentTimeMillis();
-        endTime = startTime + 20000;
-        System.out.println(startTime);
-        System.out.println(endTime);
-        System.out.println(System.currentTimeMillis());
+        endTime = System.currentTimeMillis() + 20000;
     }
+
+    public boolean isHealthFull() {
+        if(health == maxHealth) {return true;}
+        else {return false;}
+    }
+
+    public void setHealthMax(){health = maxHealth;}
 }
