@@ -8,6 +8,7 @@ import com.craig.game.Screens.*;
 import com.craig.game.srpite.CText;
 import com.craig.game.state.State;
 import com.craig.game.state.instances.Test;
+import com.craig.game.test.GameTest;
 
 public class CraigGame extends Game {
 	public SpriteBatch Batch;
@@ -18,13 +19,33 @@ public class CraigGame extends Game {
 	private LoadingScreen loadingScreen;
 	private PauseScreen pauseScreen;
 
+	private boolean Test = false;
+
 	public final static int MENU = 0;
 	public final static int APPLICATION = 1;
 	public final static int ENDGAME = 2;
 	public final static int PAUSE = 3;
 
+	public CraigGame()
+	{
+		super();
+		Test = false;
+	}
+
+	public CraigGame(boolean test)
+	{
+		super();
+		Test = test;
+	}
+
 	@Override
 	public void create () {
+		//debug code used to run unit tests if needed
+		if(Test)
+		{
+			GameTest.test(this);
+		}
+
 		CText.DefualtFont = new BitmapFont();
 
 		Batch = new SpriteBatch();

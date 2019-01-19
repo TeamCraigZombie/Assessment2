@@ -13,7 +13,7 @@ public class Player extends Entity {
     private int health;
     private int MAXV;
     private double DELTAV;
-    private int mouseX, mouseY;
+    public int mouseX, mouseY;
 
     public Player(Vector2 pos, Vector2 vel, Texture tex, Vector2 size)
     {

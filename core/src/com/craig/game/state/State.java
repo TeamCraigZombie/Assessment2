@@ -15,7 +15,7 @@ public class State implements Screen {
     final CraigGame Parent;
 
     /**Array of all sprites to be drawn*/
-    private Array<Drawable> Members;
+    public Array<Drawable> Members;
 
     public OrthographicCamera Cam;
 
