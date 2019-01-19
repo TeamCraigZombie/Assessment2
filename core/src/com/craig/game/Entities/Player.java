@@ -15,7 +15,6 @@ public class Player extends Entity {
     public int MAXV;
 
     private int health;
-    private int maxHealth;
     private double DELTAV;
     public int mouseX, mouseY;
     private double endTime;
@@ -31,14 +30,12 @@ public class Player extends Entity {
         super(new Vector2(607, 2048), tex, new Vector2(50, 50));
         if (character == 0) {
             health = 150;
-            maxHealth = 150;
             DELTAV = 0.2;
             MAXV = 3;
             trueV = 3;
         }
         else {
             health = 100;
-            maxHealth = 100;
             DELTAV = 0.2;
             MAXV = 6;
             trueV = 6;
@@ -50,7 +47,7 @@ public class Player extends Entity {
         if(!(mapBox == null)) {wallCollision(mapBox);}
         sprite.X += velocity.x;
         sprite.Y += velocity.y;
-        //System.out.println(sprite.X);
+        //System.out.println(health);
         //System.out.println(sprite.Y);
         mouseX = (int)camPos.x - (Gdx.graphics.getWidth()/2) + Gdx.input.getX();
         mouseY = (int)camPos.y + (Gdx.graphics.getHeight()/2) - Gdx.input.getY();
@@ -137,10 +134,5 @@ public class Player extends Entity {
         endTime = System.currentTimeMillis() + 20000;
     }
 
-    public boolean isHealthFull() {
-        if(health == maxHealth) {return true;}
-        else {return false;}
-    }
-
-    public void setHealthMax(){health = maxHealth;}
+    public void increaseHealth(){health += 10;}
 }

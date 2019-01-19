@@ -11,8 +11,8 @@ public class MaxHealth extends Powerup {
 
     @Override
     public boolean checkCollision(Player obj, boolean na) {
-        if (isCollision(obj) && !obj.isHealthFull()) {
-            obj.setHealthMax();
+        if (isCollision(obj)) {
+            obj.increaseHealth();
             return true;
         } else {
             return false;
