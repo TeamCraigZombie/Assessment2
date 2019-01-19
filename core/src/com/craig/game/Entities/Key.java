@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 public class Key extends GroundItem {
-    private Boolean found;
+    public Boolean found;
 
     public Key(Vector2 pos, Texture tex){
         super(pos, tex);

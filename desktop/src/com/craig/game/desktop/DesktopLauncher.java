@@ -7,11 +7,11 @@ import com.craig.game.CraigGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new CraigGame(), config);
+		new LwjglApplication(new CraigGame(true), config);
 
 		config.width = 1920;
 		config.height = 1080;
-		config.fullscreen = true;
+		config.fullscreen = false;
 		config.foregroundFPS = 60;
 	}
 }

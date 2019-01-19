@@ -24,9 +24,9 @@ public class MainScreen extends State {
     private CraigGame parent;
     private Stage stage;
 
-    private Player player1;
+    public Player player1;
     private Array<Projectile> bullets = new Array<Projectile>();
-    private boolean mouseHeld, gameComplete,  rapidFire;
+    public boolean mouseHeld, gameComplete,  rapidFire;
 
     private TiledMap tiledMap;
     private TiledMapRenderer tMapRenderer;
@@ -36,8 +36,8 @@ public class MainScreen extends State {
     private Vector2 csCamBox;
     private int rchCamBox;
 
-    private Array<Powerup> powerups = new Array<Powerup>();
-    private Array<Key> Keys = new Array<Key>();
+    public Array<Powerup> powerups = new Array<Powerup>();
+    public Array<Key> Keys = new Array<Key>();
     private RapidFire currentRF;
 
 
@@ -63,7 +63,7 @@ public class MainScreen extends State {
         csCamBox = new Vector2(3035, 1797);
         rchCamBox = 3740;
 
-        player1 = new Player(new Texture("player.png"), character);
+        player1 = new Player(new Texture("Character.png"), character);
         add(player1.sprite);
         mouseHeld = false;
         gameComplete = false;
@@ -74,14 +74,14 @@ public class MainScreen extends State {
             add(powerups.get(i).sprite);
             powerups.add(new MaxHealth(new Texture("HealthPack.png"), mapSize, collisionLayer) );
             add(powerups.get(i+1).sprite);
-            powerups.add(new RapidFire(new Texture("rSquare.png"), mapSize, collisionLayer) );
+            powerups.add(new RapidFire(new Texture("RFire.png"), mapSize, collisionLayer) );
             add(powerups.get(i+2).sprite);
         }
 
         Keys.add(new Key(new Vector2(1254, 2198), new Texture("Key.png")));
         Keys.add(new Key(new Vector2(1640, 703), new Texture("Key.png")));
         Keys.add(new Key(new Vector2(4300, 2255), new Texture("Key.png")));
-        Keys.add(new Key(new Vector2(5319, 487), new Texture("Key.png")));
+        Keys.add(new Key(new Vector2(5319, 487), new Texture("Lock.png")));
 
         for(int i=0; i<Keys.size-1; i++){add(Keys.get(i).sprite);}
     }
@@ -131,7 +131,7 @@ public class MainScreen extends State {
             }
             if(gameComplete) {add(Keys.get(Keys.size-1).sprite);}
         }
-        if(gameComplete && Keys.get(Keys.size-1).checkCollision(player1, false)){parent.switchState(CraigGame.MENU, 0);}
+        if(gameComplete && Keys.get(Keys.size-1).checkCollision(player1, false)){parent.switchState(CraigGame.ENDGAME, 2);}
     }
 
     @Override
