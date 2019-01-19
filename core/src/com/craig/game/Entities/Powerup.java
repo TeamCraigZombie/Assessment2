@@ -22,4 +22,7 @@ public class Powerup extends GroundItem {
             }
         }
     }
+
+
+    public boolean israpidFire() {return false;}
 }

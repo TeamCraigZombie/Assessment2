@@ -24,9 +24,9 @@ public class MainScreen extends State {
     private CraigGame parent;
     private Stage stage;
 
-    private Player player1;
+    public Player player1;
     private Array<Projectile> bullets = new Array<Projectile>();
-    private boolean mouseHeld, gameComplete,  rapidFire;
+    public boolean mouseHeld, gameComplete,  rapidFire;
 
     private TiledMap tiledMap;
     private TiledMapRenderer tMapRenderer;
@@ -36,8 +36,8 @@ public class MainScreen extends State {
     private Vector2 csCamBox;
     private int rchCamBox;
 
-    private Array<Powerup> powerups = new Array<Powerup>();
-    private Array<Key> Keys = new Array<Key>();
+    public Array<Powerup> powerups = new Array<Powerup>();
+    public Array<Key> Keys = new Array<Key>();
     private RapidFire currentRF;
 
 

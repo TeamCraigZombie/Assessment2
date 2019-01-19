@@ -10,6 +10,4 @@ public class GroundItem extends Entity {
     }
 
     public boolean checkCollision(Player obj, boolean na){return false;}
-
-    public boolean israpidFire() {return true;}
 }
