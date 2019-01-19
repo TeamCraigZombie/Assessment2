@@ -7,43 +7,56 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.craig.game.srpite.CSprite;
 
 public class Player extends Entity {
+    public int trueV;
+    public int MAXV;
+
     private int health;
-    private int MAXV;
+    private int maxHealth;
     private double DELTAV;
     public int mouseX, mouseY;
+    private double endTime;
 
-    public Player(Vector2 pos, Vector2 vel, Texture tex, Vector2 size)
-    {
-        super(pos, vel, tex, size);
-        health = 100;
-    }
+//    public Player(Vector2 pos, Vector2 vel, Texture tex, Vector2 size)
+//    {
+//        super(pos, vel, tex, size);
+//        health = 100;
+//    }
 
-    public Player(Vector2 pos, Texture tex, Vector2 size, int character)
+    public Player(Texture tex, int character)
     {
-        super(pos, tex, size);
+        super(new Vector2(607, 2048), tex, new Vector2(50, 50));
         if (character == 0) {
             health = 150;
+            maxHealth = 150;
             DELTAV = 0.2;
             MAXV = 3;
+            trueV = 3;
         }
         else {
             health = 100;
+            maxHealth = 100;
             DELTAV = 0.2;
-            MAXV = 9;
+            MAXV = 6;
+            trueV = 6;
         }
     }
 
-    public void update(TiledMapTileLayer collisionLayer, Vector3 camPos){
+    public void update(TiledMapTileLayer collisionLayer, TiledMapTileLayer mapBox, Vector3 camPos){
         wallCollision(collisionLayer);
+        if(!(mapBox == null)) {wallCollision(mapBox);}
         sprite.X += velocity.x;
         sprite.Y += velocity.y;
+        //System.out.println(sprite.X);
+        //System.out.println(sprite.Y);
         mouseX = (int)camPos.x - (Gdx.graphics.getWidth()/2) + Gdx.input.getX();
         mouseY = (int)camPos.y + (Gdx.graphics.getHeight()/2) - Gdx.input.getY();
         rotate();
         if (velocity.x != 0 || velocity.y != 0) {updateVelocity();}
+        if (System.currentTimeMillis() >= endTime) {MAXV = trueV;}
     }
 
     private void updateVelocity(){
@@ -119,4 +132,15 @@ public class Player extends Entity {
             }
         }
     }
+
+    public void startClock(){
+        endTime = System.currentTimeMillis() + 20000;
+    }
+
+    public boolean isHealthFull() {
+        if(health == maxHealth) {return true;}
+        else {return false;}
+    }
+
+    public void setHealthMax(){health = maxHealth;}
 }

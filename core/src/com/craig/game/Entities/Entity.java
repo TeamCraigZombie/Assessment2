@@ -30,7 +30,17 @@ public class Entity {
                 (int)(x / collisionLayer.getTileWidth()),
                 (int)(y / collisionLayer.getTileHeight()));
 
-        return cell != null && cell.getTile() != null && cell.getTile().getProperties().get("wall").equals(true);
+        return cell != null && cell.getTile() != null && (cell.getTile().getProperties().get("wall").equals(true) || cell.getTile().getProperties().get("barrier").equals(true));
+    }
+
+    protected boolean isCollision(Entity obj){
+        if (sprite.X >= obj.sprite.X - obj.sprite.Width && sprite.X <= obj.sprite.X + obj.sprite.Width){
+            if (sprite.Y >= obj.sprite.Y - obj.sprite.Height && sprite.Y <= obj.sprite.Y + obj.sprite.Height){
+                return true;
+            }
+            else { return false;}
+        }
+        else {return false;}
     }
 
 }
