@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.craig.game.srpite.CSprite;
 
-public class Entity {
+public abstract class Entity {
     protected Vector2 position; //Entity position as a 2D vector.
     protected Vector2 velocity; //Entity velocity as a 2D vector.
     public CSprite sprite;  //Entity's associated sprite.

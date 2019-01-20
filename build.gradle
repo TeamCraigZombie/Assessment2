@@ -1,4 +1,5 @@
 buildscript {
+    apply plugin: "java"
     
 
     repositories {

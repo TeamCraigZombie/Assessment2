@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
-public class Powerup extends GroundItem {
+public abstract class Powerup extends GroundItem {
 
     public Powerup(Texture tex, Vector2 mapSize, TiledMapTileLayer collisionLayer) {
         //Passes texture and position of 0, 0 to the super class.
