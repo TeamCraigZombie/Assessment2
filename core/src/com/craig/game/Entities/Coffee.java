@@ -9,9 +9,12 @@ public class Coffee extends Powerup {
         super(tex, mapSize, collisionLayer);
     }
 
+    //Checks to see if there has been a collision with a player. If so then the speed value for the player is increased by a factor of 2.
     @Override
     public boolean checkCollision(Player obj, boolean na){
-        if (isCollision(obj) && obj.MAXV < obj.trueV * 2) {
+        //Check if collision has occurred and if player speed isn't already increased.
+        if (isCollision(obj) && obj.MAXV == obj.trueV) {
+            //Start timer and multiply speed.
             obj.startClock();
             obj.MAXV = obj.trueV * 2;
             return true;

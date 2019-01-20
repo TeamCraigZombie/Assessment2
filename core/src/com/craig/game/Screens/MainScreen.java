@@ -24,21 +24,21 @@ public class MainScreen extends State {
     private CraigGame parent;
     private Stage stage;
 
-    public Player player1;
-    private Array<Projectile> bullets = new Array<Projectile>();
+    public Player player1; //Player
+    private Array<Projectile> bullets = new Array<Projectile>(); //List of bullets
     public boolean mouseHeld, gameComplete,  rapidFire;
 
-    private TiledMap tiledMap;
-    private TiledMapRenderer tMapRenderer;
-    private TiledMapTileLayer collisionLayer, csBox, rchBox;
+    private TiledMap tiledMap; //tile map .tmx file
+    private TiledMapRenderer tMapRenderer; //renderer for tile map file
+    private TiledMapTileLayer collisionLayer, csBox, rchBox;    //layers used to check for collisions.
     private Vector2 mapSize;
 
-    private Vector2 csCamBox;
-    private int rchCamBox;
+    private Vector2 csCamBox; //Camera limit when in computer science area.
+    private int rchCamBox; //Camera limit when in ron cooke hub area.
 
-    public Array<Powerup> powerups = new Array<Powerup>();
-    public Array<Key> Keys = new Array<Key>();
-    private RapidFire currentRF;
+    public Array<Powerup> powerups = new Array<Powerup>(); //List of power ups.
+    public Array<Key> Keys = new Array<Key>(); //List of keys and lock.
+    private RapidFire currentRF; //The current/last rapid fire power up that was picked up.
 
 
     public MainScreen(CraigGame craigGame, int character){
@@ -47,12 +47,14 @@ public class MainScreen extends State {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+        //Initialising Camera
         this.Cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Cam.position.x = 1445;
         Cam.position.y = 2337;
         Cam.update();
 
+        //Initialising the map.
         tiledMap = new TmxMapLoader().load("map.tmx");
         tMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         collisionLayer = (TiledMapTileLayer)  tiledMap.getLayers().get(1);
@@ -60,15 +62,20 @@ public class MainScreen extends State {
         rchBox = (TiledMapTileLayer)  tiledMap.getLayers().get(3);
         mapSize = new Vector2(5447, 3135);
 
+        //Assigning the camera limit values.
         csCamBox = new Vector2(3035, 1797);
         rchCamBox = 3740;
 
+        //Initialising the player.
         player1 = new Player(new Texture("Character.png"), character);
         add(player1.sprite);
+
+        //Instantiating booleans
         mouseHeld = false;
         gameComplete = false;
         rapidFire = false;
 
+        //Initialising and adding all power ups.
         for (int i=0; i < 9; i+=3) {
             powerups.add(new Coffee(new Texture("CoffeeCup2.png"), mapSize, collisionLayer) );
             add(powerups.get(i).sprite);
@@ -78,25 +85,28 @@ public class MainScreen extends State {
             add(powerups.get(i+2).sprite);
         }
 
+        //Initialising and adding all keys and the lock.
         Keys.add(new Key(new Vector2(1254, 2198), new Texture("Key.png")));
         Keys.add(new Key(new Vector2(1640, 703), new Texture("Key.png")));
         Keys.add(new Key(new Vector2(4300, 2255), new Texture("Key.png")));
         Keys.add(new Key(new Vector2(5319, 487), new Texture("Lock.png")));
-
         for(int i=0; i<Keys.size-1; i++){add(Keys.get(i).sprite);}
     }
 
     @Override
     public void update(float time)
     {
+        //Checking for user input.
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {leftClick();}
         if(!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {mouseHeld = false;}
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {keyPressed();}
 
+        //Calling the player update method and passing parameters depending on which keys have been found.
         if (!Keys.get(0).isFound()){ player1.update(collisionLayer, csBox, Cam.position);}
         else if (!Keys.get(1).isFound()){ player1.update(collisionLayer, rchBox, Cam.position);}
         else { player1.update(collisionLayer, null, Cam.position);}
 
+        //Updating bullets and removing any if any collisions have occurred.
         for (int i = 0; i < bullets.size; i++) {
             bullets.get(i).update();
             if (bullets.get(i).collision(collisionLayer)) {
@@ -104,6 +114,7 @@ public class MainScreen extends State {
                 bullets.removeIndex(i);}
         }
 
+        //Checking if any power ups have been picked up and removing them if they have been picked up.
         for (int i = 0; i < powerups.size; i++){
             if (powerups.get(i).checkCollision(player1, rapidFire)) {
                 remove(powerups.get(i).sprite);
@@ -115,10 +126,12 @@ public class MainScreen extends State {
             }
         }
 
+        //If rapid fire is active then checking if the timer is up and changing the boolean accordingly.
         if(rapidFire) {
             rapidFire = !(currentRF.isTimeUp());
         }
 
+        //Checking to see if all keys have been found. If they have then changing the boolean so that game can end.
         if(!gameComplete) {
             gameComplete = true;
             for (int i = 0; i < Keys.size - 1; i++) {
@@ -134,6 +147,7 @@ public class MainScreen extends State {
         if(gameComplete && Keys.get(Keys.size-1).checkCollision(player1, false)){parent.switchState(CraigGame.ENDGAME, 2);}
     }
 
+    //Rendering the map and updating the camera.
     @Override
     public void render(float delta) {
         updateCam();
@@ -169,6 +183,7 @@ public class MainScreen extends State {
 
     }
 
+    //Updating the camera position so that it follows the player. Which camera limits are used depends on which keys have been found.
     private void updateCam(){
         parent.Batch.setProjectionMatrix(Cam.combined);
 
@@ -198,15 +213,16 @@ public class MainScreen extends State {
         Cam.update();
     }
 
+    //Checks to see which key is being pressed and calls the relevant method.
     private void keyPressed(){
         if(Gdx.input.isKeyPressed(Input.Keys.W)){player1.moveUp(collisionLayer);}
         if(Gdx.input.isKeyPressed(Input.Keys.S)){player1.moveDown(collisionLayer);}
         if(Gdx.input.isKeyPressed(Input.Keys.A)){player1.moveLeft(collisionLayer);}
         if(Gdx.input.isKeyPressed(Input.Keys.D)){player1.moveRight(collisionLayer);}
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){parent.switchState(CraigGame.PAUSE, 0);}
-        if(Gdx.input.isKeyPressed(Input.Keys.NUM_1)){tiledMap.getLayers().get(1).setVisible(true);}
     }
 
+    //Calls the shoot method and adds the bullet's sprite to list of drawables only if mouse had previously been released or if rapid fire is active.
     private void leftClick() {
         if (!mouseHeld || rapidFire) {
             add(player1.shoot(bullets));

@@ -1,13 +1,10 @@
 package com.craig.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.craig.game.Screens.*;
 import com.craig.game.srpite.CText;
-import com.craig.game.state.State;
-import com.craig.game.state.instances.Test;
 import com.craig.game.test.GameTest;
 
 public class CraigGame extends Game {
@@ -49,7 +46,6 @@ public class CraigGame extends Game {
 		CText.DefualtFont = new BitmapFont();
 
 		Batch = new SpriteBatch();
-		//setScreen(new Test(this));
 
 		loadingScreen = new LoadingScreen(this);
 		setScreen(loadingScreen);
